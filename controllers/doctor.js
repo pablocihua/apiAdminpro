@@ -1,31 +1,32 @@
 'use strict'
 
 // Models
-var Hospital = require('../models/hospital');
+var Doctor = require('../models/doctor');
 
-function getHospitals( req, res ){
+function getDoctors( req, res ){
     var from = req.query.from || 5;
     from = Number( from );
 
-    Hospital.find({})
+    Doctor.find({})
     .skip( from )
     .limit( 5 )
-    //.populate({ path: 'user_fk'})
+    // .populate({ path: 'user_fk', column: 'name email'})
     .populate('user_fk', 'name email')
-    .exec(( err, hospitals ) => {
+    .populate('hospital_fk')
+    .exec(( err, doctors ) => {
         if( err ){
             res.status( 500 )
             .send({
                 ok: false,
-                message: 'Error en la petición a hospitales!'
+                message: 'Error en la petición a doctores!'
             });
         } else {
-            if( hospitals ){
-                Hospital.count({}, ( err, count ) => {
+            if( doctors ){
+                Doctor.count({}, ( err, count ) => {
                     res.status( 200 )
                     .send({
                         ok: true,
-                        hospitals: hospitals,
+                        doctors: doctors,
                         total: count
                     });
                 });
@@ -33,115 +34,117 @@ function getHospitals( req, res ){
                 res.status( 404 )
                 .send({
                     ok: true,
-                    message: 'No hay hospitales'
+                    message: 'No hay doctores'
                 });
             }
         }
     });
 }
 /********************
- *   Add new hospital  *
+ *   Add new doctor  *
 ********************/
-function addHospital( req, res ){
+function addDoctor( req, res ){
     var body = req.body;
-    var hospital = new Hospital({
+    var doctor = new Doctor({
         name: body.name,
-        user_fk: req.user._id
+        user_fk: req.user._id,
+        hospital_fk: body.hospital_fk
     });
 
-    hospital.save(( err, hospitalSaved ) => {
+    doctor.save(( err, doctorSaved ) => {
         if( err ){
             return res.status( 400 ).json({
                 ok: false,
-                message: 'Error al crear hospital!',
+                message: 'Error al crear doctor!',
                 errors: err
             });
         }
 
         res.status( 201 ).json({
             ok: true,
-            user: hospitalSaved
+            user: doctorSaved
         });
     });
 }
 /********************
- *   Update hospital  *
+ *   Update doctor  *
 ********************/
-function updateHospital( req, res ){
+function updateDoctor( req, res ){
     var id = req.params.id;
     var body = req.body;
 
-    Hospital.findById( id, ( err, hospital ) => {
+    Doctor.findById( id, ( err, doctor ) => {
         if( err ){
             return res.status( 500 ).json({
                 ok: false,
-                message: 'Error al buscar hospital!',
+                message: 'Error al buscar doctor!',
                 errors: err
             });
         }
 
-        if( !hospital ){
+        if( !doctor ){
             return res.status( 400 ).json({
                 ok: false,
-                message: 'El hospital con el '+id+'no existe!',
+                message: 'El doctor con el '+id+'no existe!',
                 errors: {
-                    message: 'No existe un hospital con ese ID'
+                    message: 'No existe un doctor con ese ID'
                 }
             });
         }
 
-        hospital.name = body.name;
-        hospital.user = req.user._id;
+        doctor.name = body.name;
+        doctor.user = req.user._id;
+        doctor.hospital = body.hospital_fk;
 
-        hospital.save(( err, hospitalSaved ) => {
+        doctor.save(( err, doctorSaved ) => {
             if( err ){
                 return res.status( 400 ).json({
                     ok: false,
-                    message: 'Error al actualizar hospital!',
+                    message: 'Error al actualizar doctor!',
                     errors: err
                 });
             }
 
             res.status( 200 ).json({
                 ok: true,
-                hospital: hospitalSaved
+                doctor: doctorSaved
             });
         });
     });
 }
 /********************
-*  Delete hospital  *
+*  Delete doctor  *
 ********************/
-function deleteHospital( req, res ){
+function deleteDoctor( req, res ){
     var id = req.params.id;
 
-    Hospital.findOneAndRemove( id, ( err, hospitalDeleted ) => {
+    Doctor.findOneAndRemove( id, ( err, doctorDeleted ) => {
         if( err ){
             return res.status( 500 ).json({
                 ok: false,
-                message: 'Error al borrar hospital!',
+                message: 'Error al borrar doctor!',
                 errors: err
             });
         }
 
-        if( !hospitalDeleted ){
+        if( !doctorDeleted ){
             return res.status( 400 ).json({
                 ok: false,
-                message: 'No existe un hospital con ese ID',
-                errors: { message: 'No existe un hospital con ese ID'}
+                message: 'No existe un doctor con ese ID',
+                errors: { message: 'No existe un doctor con ese ID'}
             });
         }
 
         res.status( 200 ).json({
             ok: true,
-            hospital: hospitalDeleted
+            doctor: doctorDeleted
         });
     });
 }
 
 module.exports = {
-    getHospitals,
-    addHospital,
-    updateHospital,
-    deleteHospital
+    getDoctors,
+    addDoctor,
+    updateDoctor,
+    deleteDoctor
 };

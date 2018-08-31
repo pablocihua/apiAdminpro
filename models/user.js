@@ -4,7 +4,7 @@ var uniqueValidaor = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 
 var rolesRight = {
-    values: ['ADMIN_ROLE', 'USER_ROLE'],
+    values: ['ADMIN_ROLE', 'ROLE_USER'],
     message: '{VALUE} no es un role permitido'
 };
 
@@ -38,6 +38,8 @@ var userSchema = new Schema({
         default: 'ROLE_USER',
         enum: rolesRight
     }
+}, {
+    collection: 'User'
 });
 
 userSchema.plugin( uniqueValidaor, { message: "{PATH} debe ser único"});
