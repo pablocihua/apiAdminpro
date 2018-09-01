@@ -4,7 +4,7 @@
 var Doctor = require('../models/doctor');
 
 function getDoctors( req, res ){
-    var from = req.query.from || 5;
+    var from = req.query.from || 0;
     from = Number( from );
 
     Doctor.find({})

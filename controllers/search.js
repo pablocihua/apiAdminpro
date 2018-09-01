@@ -1,4 +1,5 @@
 'use strict'
+
 String.prototype.ucfirst = function(){
     return this.charAt( 0 ).toUpperCase() + this.substr( 1 );
 }
@@ -37,7 +38,8 @@ var Searching    = {
         var search = req.params.search,
             table = req.params.table,
             regex = new RegExp( search, 'i'),
-            promise;
+            promise,
+            item = table;
 
         table = '_search' + table.ucfirst();
 
@@ -46,7 +48,7 @@ var Searching    = {
             promise.then( data => {
                 res.status( 200 ).json({
                     ok: true,
-                    [ table ]: data
+                    [ item ]: data
                 });
             });
         } else {

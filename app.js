@@ -19,6 +19,7 @@ var userRoutes = require('./routes/user');
 var hospitalRoute = require('./routes/hospital');
 var doctorRoute = require('./routes/doctor');
 var uploadRoutes = require('./routes/upload');
+var imageRoutes = require('./routes/image');
 
 // Conexion Db
 mongoose.connection.openUri('mongodb://localhost:27017/hospitalDb', ( err, res ) => {
@@ -27,12 +28,18 @@ mongoose.connection.openUri('mongodb://localhost:27017/hospitalDb', ( err, res )
     console.log('Base de datos: \x1b[32m%s\x1b[0m', 'online');
 });
 
+// Server Index config
+// var serverIndex = require('serve-index');
+// app.use( express.static( __dirname + '/'));
+// app.use('/uploads', serverIndex( __dirname + '/uploads'));
+
 // Routes
 app.use('/api', doctorRoute );
 app.use('/api', hospitalRoute );
 app.use('/user', userRoutes );
 app.use('/login', loginRoutes );
 
+app.use('/api', imageRoutes );
 app.use('/api', searchRoutes );
 app.use('/api', uploadRoutes );
 
