@@ -12,11 +12,13 @@ app.use( bodyparser.urlencoded({ extended: false }));
 app.use( bodyparser.json() );
 
 // Import routes
+var searchRoutes = require('./routes/search');
 var appRoutes =  require('./routes/app');
 var loginRoutes =  require('./routes/login');
 var userRoutes = require('./routes/user');
 var hospitalRoute = require('./routes/hospital');
 var doctorRoute = require('./routes/doctor');
+var uploadRoutes = require('./routes/upload');
 
 // Conexion Db
 mongoose.connection.openUri('mongodb://localhost:27017/hospitalDb', ( err, res ) => {
@@ -30,6 +32,10 @@ app.use('/api', doctorRoute );
 app.use('/api', hospitalRoute );
 app.use('/user', userRoutes );
 app.use('/login', loginRoutes );
+
+app.use('/api', searchRoutes );
+app.use('/api', uploadRoutes );
+
 app.use('/', appRoutes );
 
 // Listen requests
