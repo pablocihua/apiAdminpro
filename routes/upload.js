@@ -13,6 +13,6 @@ var UploadController = require('../controllers/upload');
 // Upload
 // =============================
 
-api.put('/upload', UploadController.putUpload );
+api.put('/upload/:type/:id', UploadController.putUpload );
 
 module.exports = api;
