@@ -37,6 +37,10 @@ var userSchema = new Schema({
         required: true,
         default: 'ROLE_USER',
         enum: rolesRight
+    },
+    google: {
+        type: Boolean,
+        default: false
     }
 }, {
     collection: 'User'
