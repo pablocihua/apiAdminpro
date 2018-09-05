@@ -39,6 +39,43 @@ function getHospitals( req, res ){
         }
     });
 }
+
+
+/*********************
+* Get Hospital by Id *
+*********************/
+function getHospitalByID( req, res ){
+    var id=  req.params.id;
+    
+    Hospital
+    .findById( id )
+    .populate('user_fk', 'name email img')
+    .exec(( err, hospital ) => {
+        if( err ){
+            return res.status( 500 )
+            .json({
+                ok: false,
+                message: 'Error al buscar hospital',
+                errors: err
+            });
+        }
+
+        if( !hospital ){
+            return res.status( 400 ).json({
+                ok: false,
+                message: 'El hospital con el id '+ id +' no existe  ',
+                errors: {
+                    message: 'No existe un hospital con ese ID'
+                }
+            });
+        }
+
+        res.status( 200 ).json({
+            ok: true,
+            hospital: hospital
+        });
+    });
+}
 /********************
  *   Add new hospital  *
 ********************/
@@ -141,6 +178,7 @@ function deleteHospital( req, res ){
 
 module.exports = {
     getHospitals,
+    getHospitalByID,
     addHospital,
     updateHospital,
     deleteHospital
