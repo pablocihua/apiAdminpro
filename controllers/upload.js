@@ -40,7 +40,7 @@ var Upload = {
         }
 
         // Get file name
-        var _file = req.files.imagen;
+        var _file = req.files.image;
         var nameShort = _file.name.split('.');
         var ext = nameShort[ nameShort.length -1 ];
         // Extensions valid
