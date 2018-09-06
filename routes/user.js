@@ -3,7 +3,7 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 // var seed = require('../config/config').SEED;
 
-var mdAuthentication = require('../middleware/authentication');
+var mdAuth = require('../middleware/authentication');
 
 var app = express();
 
@@ -59,7 +59,7 @@ app.get('/', ( req, res, next ) => {
 /********************
  *   Update user  *
 ********************/
-app.put('/:id', mdAuthentication.verifyToken, ( req, res ) => {
+app.put('/:id', [ mdAuth.verifyToken, mdAuth.verifyRole ], ( req, res ) => {
     var id = req.params.id;
     var body = req.body;
 
@@ -107,7 +107,7 @@ app.put('/:id', mdAuthentication.verifyToken, ( req, res ) => {
 /********************
  *   Add new user  *
 ********************/
-app.post('/', mdAuthentication.verifyToken, ( req, res ) => {
+app.post('/', ( req, res ) => {
     var body = req.body;
     var user = new User({
         name: body.name,
@@ -137,7 +137,7 @@ app.post('/', mdAuthentication.verifyToken, ( req, res ) => {
 /********************
  *   Delete user  *
 ********************/
-app.delete('/:id', mdAuthentication.verifyToken, ( req, res ) => {
+app.delete('/:id', [ mdAuth.verifyToken, mdAuth.verifyRole ], ( req, res ) => {
     var id = req.params.id;
 
     User.findOneAndRemove( id, ( err, userDeleted ) => {

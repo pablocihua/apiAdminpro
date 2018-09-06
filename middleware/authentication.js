@@ -27,3 +27,28 @@ exports.verifyToken = function ( req, res, next ){
         // });
     });
 }
+/********************
+ *   Check Role  *
+********************/
+exports.verifyRole = function( req, res, next ){
+    var user = req.user;
+
+    var id = null;
+    if( req.hasOwnProperty('params')){
+        id = req.params.id || null;
+    }
+
+    if( user.role === 'ROLE_ADMIN' || user._id === id ){
+        next();
+        return;
+    } else {
+        return res.status( 401 )
+            .json({
+                ok: false,
+                message: 'Token Wrong - Not Permissions! '+ id,
+                errors: {
+                    message: 'You do not have permited to do this ...'+user._id
+                }
+            });
+    }
+}

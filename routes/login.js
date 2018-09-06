@@ -164,7 +164,7 @@ app.post('/', ( req, res ) => {
 });
 
 function getMenu( role ){
-    var menu: any = [
+    var menu = [
         {
             title: 'Principal',
             icon: 'mdi mdi-gauge',
@@ -186,8 +186,8 @@ function getMenu( role ){
         }
     ];
 
-    if( role == 'ADMIN_ROLE' ){
-        menu[ 0 ].submenu.unshift({ title: 'Usuarios', url: '/users'});
+    if( role === 'ROLE_ADMIN' ){
+        menu[ 1 ].submenu.unshift({ title: 'Usuarios', url: '/users'});
     }
 
     return menu;
