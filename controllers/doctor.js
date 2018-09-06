@@ -40,6 +40,42 @@ function getDoctors( req, res ){
         }
     });
 }
+/*********************
+* Get Hospital by Id *
+*********************/
+function getDoctorByID( req, res ){
+    var id=  req.params.id;
+    
+    Doctor
+    .findById( id )
+    .populate('user_fk', 'name email img')
+    .populate('hospital_fk')
+    .exec(( err, doctor ) => {
+        if( err ){
+            return res.status( 500 )
+            .json({
+                ok: false,
+                message: 'Error al buscar doctor',
+                errors: err
+            });
+        }
+
+        if( !doctor ){
+            return res.status( 400 ).json({
+                ok: false,
+                message: 'El doctor con el id '+ id +' no existe  ',
+                errors: {
+                    message: 'No existe un doctor con ese ID'
+                }
+            });
+        }
+
+        res.status( 200 ).json({
+            ok: true,
+            doctor: doctor
+        });
+    });
+}
 /********************
  *   Add new doctor  *
 ********************/
@@ -62,7 +98,7 @@ function addDoctor( req, res ){
 
         res.status( 201 ).json({
             ok: true,
-            user: doctorSaved
+            doctor: doctorSaved
         });
     });
 }
@@ -144,6 +180,7 @@ function deleteDoctor( req, res ){
 
 module.exports = {
     getDoctors,
+    getDoctorByID,
     addDoctor,
     updateDoctor,
     deleteDoctor

@@ -7,6 +7,7 @@ var DoctorController = require('../controllers/doctor');
 var Doctor =  require('../models/doctor');
 
 api.get('/doctor', DoctorController.getDoctors );
+api.get('/doctor/:id', DoctorController.getDoctorByID );
 api.post('/doctor-register', mdAuthentication.verifyToken, DoctorController.addDoctor );
 api.put('/doctor-update/:id', mdAuthentication.verifyToken, DoctorController.updateDoctor );
 api.delete('/doctor-delete/:id', mdAuthentication.verifyToken, DoctorController.deleteDoctor );

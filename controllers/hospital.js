@@ -40,7 +40,6 @@ function getHospitals( req, res ){
     });
 }
 
-
 /*********************
 * Get Hospital by Id *
 *********************/
@@ -97,7 +96,7 @@ function addHospital( req, res ){
 
         res.status( 201 ).json({
             ok: true,
-            user: hospitalSaved
+            hospital: hospitalSaved
         });
     });
 }
