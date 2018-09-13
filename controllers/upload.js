@@ -86,10 +86,9 @@ var Upload = {
                     }
                 });
             }
-
             var pathOld = `./uploads/${ type }s/` + item.img;
             // If it exists, deletes the before image.
-            if( fs.existsSync( pathOld )){
+            if( fs.existsSync( pathOld ) && item.img.length ){
                 fs.unlink( pathOld );
             }
 
